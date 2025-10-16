@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../config/di/di.dart';
-import '../../../../../core/utils/app_assets.dart';
-import '../../../../../core/utils/app_colors.dart';
-import '../../../../widgets/home_screen_app_bar.dart';
-import '../cubit/home_screen_cubit.dart';
+import '../../../../config/di/di.dart';
+import '../../../../core/utils/app_assets.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../widgets/home_screen_app_bar.dart';
+import 'cubit/home_screen_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,15 +25,22 @@ class _HomeScreenState extends State<HomeScreen> {
     CartCubit.get(context).getUserCart();
   }
 
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       bloc: viewModel,
       builder: (context, state) {
+        final bool isProfileTab = viewModel.currentIndex == 3;
+
         return Scaffold(
-          appBar: const HomeScreenAppBar(),
-          body:
-              viewModel.tabs[viewModel.currentIndex], // 2. Display current tab
-          bottomNavigationBar: _buildBottomNavBar(), // 3. Add navigation
+          appBar: isProfileTab
+              ? null
+              : const PreferredSize(
+                  preferredSize: Size.fromHeight(kToolbarHeight),
+                  child: HomeScreenAppBar(),
+                ),
+          body: viewModel.tabs[viewModel.currentIndex],
+          bottomNavigationBar: _buildBottomNavBar(),
         );
       },
     );

@@ -10,22 +10,40 @@ part 'product_state.dart';
 
 @injectable
 class ProductCubit extends Cubit<ProductState> {
-  GetProductsUseCase getProductsUseCase;
+  final GetProductsUseCase getProductsUseCase;
+
+  List<Product> _allProducts = [];
+  List<Product> _filteredProducts = [];
+
   ProductCubit({required this.getProductsUseCase}) : super(ProductLoading());
-  void getProducts() async {
+
+  Future<void> getProducts() async {
     try {
-      print('🔄 ProductCubit: Loading started...');
       emit(ProductLoading());
-      var productsList = await getProductsUseCase.invoke();
-      print(
-          '✅ ProductCubit: Products loaded - ${productsList?.length ?? 0} items');
-      emit(ProductLoaded(productsList: productsList));
+      final productsList = await getProductsUseCase.invoke();
+      _allProducts = productsList ?? [];
+      _filteredProducts = _allProducts;
+      emit(ProductLoaded(productsList: _filteredProducts));
     } on AppException catch (e) {
       emit(ProductError(message: e.message));
     } catch (e, s) {
-      print('❌ ProductCubit: Unexpected error - $e');
-      print('Stack trace: $s');
+      print('❌ ProductCubit Error: $e');
+      print(s);
       emit(ProductError(message: 'Unexpected error: $e'));
     }
+  }
+
+  void filterProducts(String query) {
+    if (query.isEmpty) {
+      _filteredProducts = _allProducts;
+    } else {
+      _filteredProducts = _allProducts
+          .where((p) =>
+              (p.title?.toLowerCase().contains(query.toLowerCase()) ?? false) ||
+              (p.description?.toLowerCase().contains(query.toLowerCase()) ??
+                  false))
+          .toList();
+    }
+    emit(ProductLoaded(productsList: _filteredProducts));
   }
 }
