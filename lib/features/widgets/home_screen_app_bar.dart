@@ -152,6 +152,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_styles.dart';
 import '../presentation/pages/cart_screen/cubit/cart_cubit.dart';
+import '../presentation/pages/home_screen/tabs/categories_tab/product_screen/cubit/product_cubit.dart';
 
 class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool? automaticallyImplyLeading;
@@ -182,6 +183,9 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: TextFormField(
                   cursorColor: AppColors.primary,
                   style: AppStyles.regular16primary,
+                  onChanged: (value) {
+                    context.read<ProductCubit>().filterProducts(value);
+                  },
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 12.w,

@@ -12,9 +12,9 @@ import 'core/utils/app_routes.dart';
 import 'features/presentation/auth/login/login_screen.dart';
 import 'features/presentation/auth/register/register_screen.dart';
 import 'features/presentation/pages/cart_screen/cart_screen.dart';
+import 'features/presentation/pages/home_screen/home_screen.dart';
 import 'features/presentation/pages/home_screen/tabs/categories_tab/product_screen/product_details_screen.dart';
 import 'features/presentation/pages/home_screen/tabs/categories_tab/product_screen/product_list_screen.dart';
-import 'features/presentation/pages/home_screen/tabs/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
